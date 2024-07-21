@@ -1,0 +1,13 @@
+import pandas as pd
+
+def nth_highest_salary(employee: pd.DataFrame, N: int) -> pd.DataFrame:
+    df=employee.drop_duplicates(subset='salary')
+    df['rank']=df['salary'].rank(method='dense', ascending=False)
+    df=df[df["rank"]==N][['salary']]
+    if df.shape[0] == 0:
+        return pd.DataFrame({'getNthHighestSalary('+str(N)+')': [None]})
+
+    # rename the column names according to the output data structure
+    df = df.rename(columns={'salary':'getNthHighestSalary('+str(N)+')'})
+    return df
+
