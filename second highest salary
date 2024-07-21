@@ -1,0 +1,14 @@
+import pandas as pd
+
+def second_highest_salary(employee: pd.DataFrame) -> pd.DataFrame:
+    salary_list = employee["salary"].unique()
+
+    # if the length if the salary_list is less than or equal 1, return None
+    if len(salary_list)<=1:
+        return pd.DataFrame({"SecondHighestSalary": [None]})
+    else:
+        # by default 'sorted' is ascending
+        # second highest salary == second last element in the sorted list
+        return pd.DataFrame({"SecondHighestSalary": [sorted(salary_list)[-2]]})
+
+    
