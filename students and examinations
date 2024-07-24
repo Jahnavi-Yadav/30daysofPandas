@@ -1,0 +1,10 @@
+import pandas as pd
+
+def students_and_examinations(students: pd.DataFrame, subjects: pd.DataFrame, examinations: pd.DataFrame) -> pd.DataFrame:
+    groups = examinations.groupby(['student_id', 
+                                    'subject_name']).size().reset_index(name='attended_exams')
+    combinations = pd.merge(students, subjects, how='cross')
+    df=pd.merge(combinations,groups, on=['student_id','subject_name'],how='left')
+    df['attended_exams']=df['attended_exams'].fillna(0).astype(int)
+    df.sort_values(['student_id','subject_name'], inplace=True)
+    return df[['student_id', 'student_name', 'subject_name', 'attended_exams']]
