@@ -1,0 +1,24 @@
+import pandas as pd
+
+def categorize_products(activities: pd.DataFrame) -> pd.DataFrame:
+    # Sort activities by 'product'
+    activities = activities.sort_values(by="product")
+    
+    # Group by 'sell_date' and aggregate 'product' for unique values
+    df = activities.groupby("sell_date").agg({"product": ["nunique", "unique"]}).reset_index()
+    
+    # Flatten the column MultiIndex
+    df.columns = [c[0] + "_" + c[1] for c in df.columns]
+    
+    # Rename columns for clarity
+    df = df.rename(columns={"sell_date_": "sell_date", "product_nunique": "num_sold", "product_unique": "products"})
+    
+    # Convert numpy.ndarray to a list of strings before joining
+    df["products"] = df["products"].apply(lambda x: ','.join(x.astype(str)))
+    
+    # Sort by 'sell_date'
+    df = df.sort_values(by="sell_date")
+    
+    return df
+
+
